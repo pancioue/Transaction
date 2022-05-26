@@ -28,10 +28,10 @@ $res = sendCurl($url); // 處理php邏輯
 if($res){
      $db->commit(); // 成功commit
    }else{
-   	 $db->rollback(); // 失敗rollback
+     $db->rollback(); // 失敗rollback
    }
 }catch(){
-	$db->rollback(); // 錯誤rollback;
+  $db->rollback(); // 錯誤rollback;
 }
 ```
 
@@ -61,9 +61,9 @@ rollback;
 
 * 讀鎖又稱共享鎖(S鎖)，寫鎖又稱排他鎖(X鎖)
 
-* 同個資源同事務，讀鎖與寫鎖不會互相排斥
-* 同個資源不同事務，排他鎖不可與其他鎖共存
-* 同個資源不同事務，共享鎖可以共存  
+* 在相同資源下
+  - 不同事務間只有共享鎖可以共存
+  - 相同事務共享鎖與排他鎖並不衝突  
   ![lock_relation2](https://user-images.githubusercontent.com/24542187/170448775-12bcb9ad-e9a1-44a2-a8f8-9c4ba08c235d.png)  
 
 * 資料庫的增刪改操作預設都會加排他鎖，而查詢不會加任何鎖
