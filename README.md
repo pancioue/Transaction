@@ -56,28 +56,35 @@ rollback;
 * MyISAM都使用表鎖，併發不好，但也不會有死鎖的問題
   innodb才支援事務及行級鎖，要使用行鎖必須要有索引，否則等於是表鎖
 
-* 讀鎖又稱共享鎖(S鎖)，寫鎖又稱排他鎖(X鎖)
-
 * 樂觀鎖與悲觀鎖
   這是針對讀(select)的說法，不是實際的鎖
 
-* 同個資源不可同時存在共享鎖與排他鎖
+* 讀鎖又稱共享鎖(S鎖)，寫鎖又稱排他鎖(X鎖)
+
+* 同個資源同事務，讀鎖與寫鎖不會互相排斥
+* 同個資源不同事務，排他鎖不可與其他鎖共存
+* 同個資源不同事務，共享鎖可以共存  
+  ![lock_relation2](https://user-images.githubusercontent.com/24542187/170448775-12bcb9ad-e9a1-44a2-a8f8-9c4ba08c235d.png)  
 
 * 資料庫的增刪改操作預設都會加排他鎖，而查詢不會加任何鎖
   即使不是在trasaction中操作，依然會加鎖
 
-* Lock Table
+* lock table
   - `LOCK TABLE table READ;`  
     表讀鎖：所有終端都不能寫操作，但可以進行讀操作
-
   - `LOCK TABLE table WRITE;`  
     表加寫鎖：加鎖的終端機可以進行讀寫，其他終端機不能讀也不能寫
-
-  - 注意這兩個語法並不需要放在transaction中，這裡的讀指的是一般的讀取
+  - 注意這兩個語法並不需要放在transaction中，這裡的讀指的是一般的讀取，與行鎖不太一樣
+    不過如果真的要鎖住整張表可以直接用`select * from table for update`應該也是一樣的意思
+  - 若lock table 與 transactionu共同使用時，以下是官網所描述的
+    > LOCK TABLES is not transaction-safe and implicitly commits any active transaction before attempting to lock the tables.
+      UNLOCK TABLES implicitly commits any active transaction, but only if LOCK TABLES has been used to acquire table locks
 
 * 意象鎖:參考連結
 
-參考: https://blog.csdn.net/localhost01/article/details/78720727
+參考:   
+https://blog.csdn.net/localhost01/article/details/78720727  
+https://dev.mysql.com/doc/refman/8.0/en/lock-tables.html
 
 
 ## 事務隔離級別
