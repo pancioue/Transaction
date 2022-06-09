@@ -66,8 +66,7 @@ rollback;
   - 相同事務共享鎖與排他鎖並不衝突  
   ![lock_relation2](https://user-images.githubusercontent.com/24542187/170448775-12bcb9ad-e9a1-44a2-a8f8-9c4ba08c235d.png)  
 
-* 資料庫的增刪改操作預設都會加排他鎖，而查詢不會加任何鎖
-  即使不是在trasaction中操作，依然會加鎖
+* 資料庫的增刪改操作預設都會加排他鎖，即使不是在trasaction中操作，依然會加鎖；而查詢不會加鎖
 
 * lock table
   - `LOCK TABLE table READ;`  
